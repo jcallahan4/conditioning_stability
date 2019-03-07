@@ -1,8 +1,16 @@
 # condition_stability.py
-"""Volume 1: Conditioning and Stability.
-<Name>
-<Class>
-<Date>
+"""
+Conditioning and Stability
+Jake Callahan
+
+The condition number of a function measures how sensitive that function is to
+changes in the input. On the other hand, the stability of an algorithm measures
+how accurately that algorithm computes the value of a function from exact input.
+Both of these concepts are important for answering the crucial question, “is my
+computer telling the truth?” In this program, I examine the conditioning of
+common linear algebra problems, including computing polynomial roots and matrix
+eigenvalues. I also present an example to demonstrate how two different algorithms
+for the same problem may not have the same level of stability.
 """
 
 import numpy as np
@@ -10,10 +18,8 @@ import sympy as sy
 import scipy.linalg as la
 from matplotlib import pyplot as plt
 
-
-# Problem 1
 def matrix_cond(A):
-    """Calculate the condition number of A with respect to the 2-norm."""
+    """Calculate the condition number of a matrix A with respect to the 2-norm."""
     #Get singular values of A
     sing_vals = la.svdvals(A)
     #Get min and max singular values
@@ -24,9 +30,7 @@ def matrix_cond(A):
     #Return condition number
     return sing_max/sing_min
 
-
-# Problem 2
-def prob2():
+def perturb_Wilk():
     """Randomly perturb the coefficients of the Wilkinson polynomial by
     replacing each coefficient c_i with c_i*r_i, where r_i is drawn from a
     normal distribution centered at 1 with standard deviation 1e-10.
@@ -48,7 +52,7 @@ def prob2():
     rel_cond = []
 
     for n in range(100):
-        #Get h to perturb coefficients
+        #Get a small, random value to perturb coefficients with
         h = np.random.normal(1,1e-10,21)
 
         #Get new coefficients and new roots
@@ -84,7 +88,7 @@ def prob2():
     plt.show()
 
     return np.mean(abs_cond), np.mean(rel_cond)
-# Problem 3
+
 def eig_cond(A):
     """Approximate the condition numbers of the eigenvalue problem at A.
 
@@ -110,8 +114,7 @@ def eig_cond(A):
 
     return k_hat, k
 
-# Problem 4
-def prob4(domain=[-100, 100, -100, 100], res=50):
+def plot_conditions(domain=[-100, 100, -100, 100], res=50):
     """Create a grid [x_min, x_max] x [y_min, y_max] with the given resolution. For each
     entry (x,y) in the grid, find the relative condition number of the
     eigenvalue problem, using the matrix   [[1, x], [y, 1]]  as the input.
@@ -138,8 +141,7 @@ def prob4(domain=[-100, 100, -100, 100], res=50):
     plt.colorbar()
     plt.show()
 
-# Problem 5
-def prob5(n):
+def plot_stabilities(n):
     """Approximate the data from "stability_data.npy" on the interval [0,1]
     with a least squares polynomial of degree n. Solve the least squares
     problem using the normal equation and the QR decomposition, then compare
@@ -175,13 +177,10 @@ def prob5(n):
     plt.ylabel('Range')
     plt.show()
 
-
-
-
-# Problem 6
-def prob6():
+def integrate_subfactorial():
     """For n = 5, 10, ..., 50, compute the integral I(n) using SymPy (the
-    true values) and the subfactorial formula (may or may not be correct).
+    true values) and the approximate subfactorial formula I(n) = (-1)**n*(!n-n!/e)
+    where !n = n!*(summation over k from 0 to n of ()(-1)**k)/k!).
     Plot the relative forward error of the subfactorial formula for each
     value of n. Use a log scale for the y-axis.
     """
